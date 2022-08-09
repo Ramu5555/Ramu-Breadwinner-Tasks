@@ -1,0 +1,29 @@
+<apex:page controller="List_of_Invoices">
+    <apex:form>
+        <script>
+        function selected(id1)
+        {
+            console.log(id1);
+            selectedid(id1);
+        }       
+        </script>
+        <apex:pageBlock title="Invoices">
+            <apex:PageblockTable value="{!invoices}" var="inv">
+                <apex:column headerValue="Invoice Number" >
+                    <apex:commandLink value="{!inv.Name}" action="{!selRecDisplay}" onclick="selected('{!inv.Id}');"/>
+                </apex:column>
+                <apex:column value="{!inv.Account__c}" headerValue="Account" />
+                <apex:column value="{!inv.Total__c}" headerValue="Total" />
+                <apex:column value="{!inv.Amount_Paid__c}" headerValue="Amount Paid" />
+                <apex:column value="{!inv.Amount_Due__c}" headerValue="Amount Due" />
+                <apex:column value="{!inv.Invoice_Date__c}" headerValue="Invoice Date" />
+                <apex:column value="{!inv.Due_Date__c}" headerValue="Due Date" />
+                <apex:column value="{!inv.Days_Overdue__c}" headerValue="Days Overdue" />
+                <apex:column value="{!inv.Status__c}" headerValue="Status" />
+            </apex:PageblockTable>
+            <apex:actionFunction action="{!selectedInvoice}" name="selectedid" reRender="formId">
+              <apex:param assignTo="{!selectedId}" value="" name="pid"/>
+            </apex:actionFunction>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
