@@ -1,0 +1,47 @@
+<apex:page controller="InvoiceRecordsController" lightningStylesheets="true">
+    
+    <apex:form >
+        <apex:pageBlock title="Invoices"  rendered="{!!table}" >
+            <apex:PageblockTable value="{!listofInvoices}" var="invoice">
+                <apex:column headerValue="Invoice Number" headerClass="row">
+                    <apex:commandLink value="{!invoice.Name}" action="{!selectedInvoice}">
+                        <apex:param assignTo="{!selectedId}" value="{!invoice.Id}" name="selectedId"/>
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column value="{!invoice.Account__c}" headerValue="Account" headerClass="row"/>
+                <apex:column value="{!invoice.Total__c}" headerValue="Total" headerClass="row"/>
+                <apex:column value="{!invoice.Amount_Paid__c}" headerValue="Amount Paid" headerClass="row"/>
+                <apex:column value="{!invoice.Amount_Due__c}" headerValue="Amount Due" headerClass="row"/>
+                <apex:column value="{!invoice.Invoice_Date__c}" headerValue="Invoice Date" headerClass="row"/>
+                <apex:column value="{!invoice.Due_Date__c}" headerValue="Due Date" headerClass="row"/>
+                <apex:column value="{!invoice.Days_Overdue__c}" headerValue="Days Overdue" headerClass="row"/>
+                <apex:column value="{!invoice.Status__c}" headerValue="Status" headerClass="row"/>
+            </apex:PageblockTable>
+            <p></p><p></p>
+            <center><apex:commandButton value="New" /></center>
+        </apex:pageBlock>
+        <apex:pageBlock title="Invoice" rendered="{!table}">
+            <apex:pageBlockSection title="Invoice Details" columns="2" collapsible="false">
+                <apex:repeat value="{!invoice}" var="invoice">
+                    <apex:outputField value="{!invoice.Name}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Account__r.Name}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Amount_Paid__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Amount_Due__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Due_Date__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Invoice_Date__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Status__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Total__c}"></apex:outputField>
+                    <apex:outputField value="{!invoice.Days_Overdue__c}"></apex:outputField>
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <style>
+        .headerRow .row
+        {
+        text-transform:initial;
+        font-size:15px;
+        color:black;
+        }
+    </style>
+</apex:page>
