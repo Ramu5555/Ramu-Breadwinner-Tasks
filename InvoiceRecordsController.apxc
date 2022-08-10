@@ -8,13 +8,6 @@ public class List_of_Invoices
       invoices = [Select Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c From Invoice__c];
         system.debug('=ivvoices== '+invoices);
     }
-    
-    public PageReference selRecDisplay()
-   {
-       pagereference ref = new pagereference('/apex/Selected_Invoice?value=');
-		ref.setredirect(true);
-		return ref;
-   }
     public void selectedInvoice()
     {
        system.debug('==selectedId== '+selectedId); 
