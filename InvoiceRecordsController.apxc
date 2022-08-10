@@ -1,17 +1,20 @@
-public class List_of_Invoices 
+public class InvoiceRecordsController 
 {
-    public List<Invoice__c> invoices{get;set;}
+    public List<Invoice__c> listofInvoices{get;set;}
     public Invoice__c invoice{get;set;}
     public static String selectedId{get;set;}
-	public List_of_Invoices()
+    public static Boolean table {get;set;}
+    public InvoiceRecordsController()
     {
-      invoices = [Select Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c From Invoice__c];
-        system.debug('=ivvoices== '+invoices);
+        listofInvoices = [SELECT Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c];
+        system.debug('=invoices== '+listofInvoices);
+        table=false;
     }
     public void selectedInvoice()
     {
-       system.debug('==selectedId== '+selectedId); 
-         invoice = [Select Id, Name, Account__c From Invoice__c where Id =: selectedId];
-        system.debug('Selected Invoice=== '+invoice.Name);
+        table = true;
+        system.debug('==selectedId== '+selectedId); 
+        invoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
+        system.debug('Selected Invoice=== '+invoice.Name); 
     }
 }
