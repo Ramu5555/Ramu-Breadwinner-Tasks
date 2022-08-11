@@ -2,8 +2,11 @@ public class InvoiceRecordsController
 {
     public List<Invoice__c> listofInvoices{get;set;}
     public Invoice__c invoice{get;set;}
+    public Invoice__c newInvoice{get;set;}
+    public Invoice__c deleteInvoice{get;set;}
     public static String selectedId{get;set;}
     public static Boolean table {get;set;}
+    public Boolean displayPopup {get; set;}
     public InvoiceRecordsController()
     {
         listofInvoices = [SELECT Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c];
@@ -16,5 +19,36 @@ public class InvoiceRecordsController
         system.debug('==selectedId== '+selectedId); 
         invoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
         system.debug('Selected Invoice=== '+invoice.Name); 
+    }
+    public void closePopup() 
+    {
+        displayPopup = false;
+    }
+    
+    public void showPopup() 
+    {
+        newInvoice = New Invoice__c();
+        displayPopup = true;
+    }
+    public void saveInvoice() 
+    {
+         displayPopup = false;
+        upsert newInvoice;
+        listofInvoices = [SELECT Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c];
+       
+    }
+    public void editInvoice() 
+    {
+        displayPopup = true;
+        newInvoice = New Invoice__c();
+        newInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
+        
+    }
+     public void deleteInvoice() 
+    {
+        deleteInvoice = New Invoice__c();
+        deleteInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
+        system.debug('==selectedInvoice=='+deleteInvoice.Name);
+        delete deleteInvoice;
     }
 }
