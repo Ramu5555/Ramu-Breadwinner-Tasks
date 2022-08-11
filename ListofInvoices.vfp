@@ -1,4 +1,4 @@
-<apex:page controller="InvoiceRecordsController" lightningStylesheets="true">
+<apex:page controller="InvoiceRecordsController" lightningStylesheets="true" docType="html -5.0">
     
     <apex:form >
         <apex:pageBlock title="Invoices"  rendered="{!!table}" >
@@ -16,9 +16,18 @@
                 <apex:column value="{!invoice.Due_Date__c}" headerValue="Due Date" headerClass="row"/>
                 <apex:column value="{!invoice.Days_Overdue__c}" headerValue="Days Overdue" headerClass="row"/>
                 <apex:column value="{!invoice.Status__c}" headerValue="Status" headerClass="row"/>
+                <apex:column headerValue="Actions" headerClass="row">
+                    <apex:commandLink value="Edit" action="{!editInvoice}" rerender="popup">
+                        <apex:param assignTo="{!selectedId}" value="{!invoice.Id}" name="selectedId"/>
+                    </apex:commandLink>
+                    &nbsp;|&nbsp;
+                    <apex:commandLink value="Delete" action="{!deleteInvoice}" oncomplete="refresh()">
+                        <apex:param assignTo="{!selectedId}" value="{!invoice.Id}" name="selectedId"/>
+                    </apex:commandLink>
+                </apex:column>
             </apex:PageblockTable>
             <p></p><p></p>
-            <center><apex:commandButton value="New" /></center>
+            <center><apex:commandButton value="New" action="{!showPopup}" rerender="popup"/></center>
         </apex:pageBlock>
         <apex:pageBlock title="Invoice" rendered="{!table}">
             <apex:pageBlockSection title="Invoice Details" columns="2" collapsible="false">
@@ -36,7 +45,38 @@
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
+    <apex:form >
+        <apex:outputPanel id="popup">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                <apex:pageBlock title="New Invoice">
+                    <apex:pageBlockSection title="Invoice Details" columns="2">
+                        <apex:inputField value="{!newInvoice.Name}"/>
+                        <apex:inputField value="{!newInvoice.Account__c}"/>
+                        <apex:inputField value="{!newInvoice.Total__c}"/>
+                        <apex:inputField value="{!newInvoice.Amount_Paid__c}"/>
+                        <apex:inputField value="{!newInvoice.Invoice_Date__c}" showDatePicker="false" type="date"/>
+                        <apex:inputField value="{!newInvoice.Due_Date__c}" showDatePicker="false" type="date"/>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+                <center><apex:commandButton value="Save" rerender="popup" action="{!saveInvoice}" oncomplete="refresh()"/>	
+                    <apex:commandButton value="cancel" action="{!closePopup}" rerender="popup"/></center>
+            </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+    
     <style>
+        .customPopup{
+        background-color: white;
+        border-style: solid;
+        border-width: 2px;
+        left: 50%;
+        padding:10px;
+        position: absolute;
+        z-index: 9999;
+        width: 1000px;
+        margin-left: -500px;
+        top:100px;
+        }
         .headerRow .row
         {
         text-transform:initial;
@@ -44,4 +84,10 @@
         color:black;
         }
     </style>
+    <script>
+    	function refresh()
+    {
+    	location.reload();
+    }
+    </script>
 </apex:page>
