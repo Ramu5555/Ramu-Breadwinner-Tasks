@@ -9,7 +9,7 @@ public class InvoiceRecordsController
     public Boolean displayPopup {get; set;}
     public InvoiceRecordsController()
     {
-        listofInvoices = [SELECT Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c];
+        listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
         system.debug('=invoices== '+listofInvoices);
         table=false;
     }
@@ -50,5 +50,6 @@ public class InvoiceRecordsController
         deleteInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
         system.debug('==selectedInvoice=='+deleteInvoice.Name);
         delete deleteInvoice;
+       
     }
 }
