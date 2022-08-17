@@ -7,11 +7,21 @@ public class InvoiceRecordsController
     public static String selectedId{get;set;}
     public static Boolean table {get;set;}
     public Boolean displayPopup {get; set;}
+    public String sortField{get;set;}
+    public String sortDirection='DESC';
     public InvoiceRecordsController()
     {
         listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
         system.debug('=invoices== '+listofInvoices);
         table=false;
+    }
+    public void tableSorting()
+    {
+        system.debug('sortFileld=='+sortField);
+        String sortf = sortField  + ' ' + sortDirection;
+        system.debug('Entered');
+       listofInvoices = Database.query('SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by '+ sortf + ''); 
+    	
     }
     public void selectedInvoice()
     {
@@ -24,7 +34,6 @@ public class InvoiceRecordsController
     {
         displayPopup = false;
     }
-    
     public void showPopup() 
     {
         newInvoice = New Invoice__c();
@@ -34,7 +43,7 @@ public class InvoiceRecordsController
     {
          displayPopup = false;
         upsert newInvoice;
-        listofInvoices = [SELECT Id, Name, Account__c, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c];
+        listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
        
     }
     public void editInvoice() 
@@ -50,6 +59,6 @@ public class InvoiceRecordsController
         deleteInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
         system.debug('==selectedInvoice=='+deleteInvoice.Name);
         delete deleteInvoice;
-       
+       listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
     }
 }
