@@ -4,19 +4,27 @@
         <apex:pageBlock title="Invoices" rendered="{!!table}">
             <apex:outputPanel layout="block"  id="refresh">
                 <apex:actionFunction action="{!tableSorting}" name="sortInvoiceTable" reRender="refresh">
-                <apex:param name="sortField" value="" assignTo="{!sortField}"/>
+                    <apex:param name="sortField" value="" assignTo="{!sortField}"/>
                 </apex:actionFunction>
                 <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example advanced table of Opportunities in actionable mode">
                     <thead>
                         <tr class="slds-line-height_reset">
-                            <th aria-label="Invoice Number" onclick="sortInvoiceNumber('Name')"  aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Invoice Number" onclick="invoiceTableSort('Name')"  aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0" >
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Name">Invoice Number</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -27,14 +35,22 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Account Name" onclick="sortAccountName('Account__r.Name')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Account Name" onclick="invoiceTableSort('Account__r.Name')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Account Name">Account Name</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -45,15 +61,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Total" onclick="sortTotal('Total__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Total" onclick="invoiceTableSort('Total__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Total">Total</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -64,15 +88,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Amount Paid" onclick="sortAmountPaid('Amount_Paid__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Amount Paid" onclick="invoiceTableSort('Amount_Paid__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Amount Paid">Amount Paid</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -83,15 +115,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Amount Due" onclick="sortAmountDue('Amount_Due__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Amount Due" onclick="invoiceTableSort('Amount_Due__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Amount Due">Amount Due</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -102,15 +142,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Invoice Date" onclick="sortInvoiceDate('Invoice_Date__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Invoice Date" onclick="invoiceTableSort('Invoice_Date__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Inoice Date">Invoice Date</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -121,15 +169,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Due Date" onclick="sortDueDate('Due_Date__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Due Date" onclick="invoiceTableSort('Due_Date__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Due Date">Due Date</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -140,15 +196,23 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Days Overdue" onclick="sortDaysOverdue('Days_Overdue__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Days Overdue" onclick="invoiceTableSort('Days_Overdue__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Days Overdue">Days Overdue</span>
                                         <span class="slds-icon_container slds-icon-utility-arrowdown">
-                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
-                                            </svg>
+                                            <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                                </svg>
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                                <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                    <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                                </svg>
+                                            </apex:outputPanel>
                                         </span>
                                     </span>
                                 </a>
@@ -159,12 +223,22 @@
                                     </span>
                                 </div>
                             </th>
-                            <th aria-label="Status" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                            <th aria-label="Status" onclick="invoiceTableSort('Status__c')" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
                                 <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
                                     
                                     <span class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
                                         <span class="slds-truncate" title="Status">Status</span>
+                                        <apex:outputPanel rendered="{!sortDirection=='ASC'}">
+                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowup')}"></use>
+                                            </svg>
+                                        </apex:outputPanel> 
                                         
+                                        <apex:outputPanel rendered="{!sortDirection=='DESC'}">
+                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/2000/svg" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#arrowdown')}"></use>
+                                            </svg>
+                                        </apex:outputPanel>
                                     </span>
                                 </a>
                                 <div class="slds-resizable">
@@ -253,17 +327,17 @@
         </apex:pageBlock>
         <apex:pageBlock title="Invoice" rendered="{!table}">
             <apex:pageBlockSection title="Invoice Details" columns="2" collapsible="false">
-             
-                    <apex:outputField value="{!invoice.Name}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Account__r.Name}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Amount_Paid__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Amount_Due__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Due_Date__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Invoice_Date__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Status__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Total__c}"></apex:outputField>
-                    <apex:outputField value="{!invoice.Days_Overdue__c}"></apex:outputField>
-               
+                
+                <apex:outputField value="{!invoice.Name}"></apex:outputField>
+                <apex:outputField value="{!invoice.Account__r.Name}"></apex:outputField>
+                <apex:outputField value="{!invoice.Amount_Paid__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Amount_Due__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Due_Date__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Invoice_Date__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Status__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Total__c}"></apex:outputField>
+                <apex:outputField value="{!invoice.Days_Overdue__c}"></apex:outputField>
+                
             </apex:pageBlockSection>
             <br/>
             <center><apex:commandButton value="Close"/></center>
@@ -314,38 +388,9 @@
         }
     </style>
     <script>
-    function sortInvoiceNumber(sortField)
+    function invoiceTableSort(sortField)
     {
-       console.log(sortField);
-        sortInvoiceTable(sortField);
-         
-    }
-    function sortAccountName(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortTotal(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortAmountPaid(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortAmountDue(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortInvoiceDate(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortDueDate(sortField)
-    {
-        sortInvoiceTable(sortField);
-    }
-    function sortDaysOverdue(sortField)
-    {
+        console.log(sortField);
         sortInvoiceTable(sortField);
     }
     </script>
