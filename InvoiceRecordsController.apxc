@@ -7,21 +7,48 @@ public class InvoiceRecordsController
     public static String selectedId{get;set;}
     public static Boolean table {get;set;}
     public Boolean displayPopup {get; set;}
-    public String sortField{get;set;}
-    public String sortDirection='DESC';
+    public String sortDirection='ASC';
+    public String sortExp = 'name';
+    public String sortField
+    {
+        get
+        {
+            return sortExp;
+        }
+        set
+        {
+            if (value == sortExp)
+                sortDirection = (sortDirection == 'ASC')? 'DESC' : 'ASC';
+            else
+                sortDirection = 'ASC';
+            sortExp = value;
+        }
+    }
+    
+    public String getSortDirection()
+    {
+        if (sortField == null || sortField == '')
+            return 'ASC';
+        else
+            return sortDirection;
+    }
+    public void listofInoiceQuery()
+    {
+        listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate DESC];
+    }
     public InvoiceRecordsController()
     {
-        listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
+        listofInoiceQuery();
         system.debug('=invoices== '+listofInvoices);
         table=false;
     }
     public void tableSorting()
     {
         system.debug('sortFileld=='+sortField);
+        system.debug('sortDirection '+sortDirection);
         String sortf = sortField  + ' ' + sortDirection;
-        system.debug('Entered');
-       listofInvoices = Database.query('SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by '+ sortf + ''); 
-    	
+        listofInvoices = Database.query('SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by '+ sortf + ''); 
+        
     }
     public void selectedInvoice()
     {
@@ -41,10 +68,10 @@ public class InvoiceRecordsController
     }
     public void saveInvoice() 
     {
-         displayPopup = false;
+        displayPopup = false;
         upsert newInvoice;
-        listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
-       
+        listofInoiceQuery();
+        
     }
     public void editInvoice() 
     {
@@ -53,12 +80,12 @@ public class InvoiceRecordsController
         newInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
         
     }
-     public void deleteInvoice() 
+    public void deleteInvoice() 
     {
         deleteInvoice = New Invoice__c();
         deleteInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
         system.debug('==selectedInvoice=='+deleteInvoice.Name);
         delete deleteInvoice;
-       listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by createddate ASC];
+        listofInoiceQuery();
     }
 }
