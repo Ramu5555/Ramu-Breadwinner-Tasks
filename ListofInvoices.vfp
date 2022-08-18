@@ -253,7 +253,7 @@
         </apex:pageBlock>
         <apex:pageBlock title="Invoice" rendered="{!table}">
             <apex:pageBlockSection title="Invoice Details" columns="2" collapsible="false">
-                <apex:repeat value="{!invoice}" var="invoice">
+             
                     <apex:outputField value="{!invoice.Name}"></apex:outputField>
                     <apex:outputField value="{!invoice.Account__r.Name}"></apex:outputField>
                     <apex:outputField value="{!invoice.Amount_Paid__c}"></apex:outputField>
@@ -263,7 +263,7 @@
                     <apex:outputField value="{!invoice.Status__c}"></apex:outputField>
                     <apex:outputField value="{!invoice.Total__c}"></apex:outputField>
                     <apex:outputField value="{!invoice.Days_Overdue__c}"></apex:outputField>
-                </apex:repeat>
+               
             </apex:pageBlockSection>
             <br/>
             <center><apex:commandButton value="Close"/></center>
