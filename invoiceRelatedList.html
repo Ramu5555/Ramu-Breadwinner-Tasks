@@ -1,0 +1,15 @@
+<template>
+<lightning-card>
+    <h4 class="slds-section-title--divider">Summary Information</h4><br>
+            Paid:<br>
+            Current Due: <br>
+            Overdue: <br>
+            Total Receivables: <br><br>
+    <h4 class="slds-section-title--divider">Invoices</h4><br>
+        <lightning-datatable
+            key-field="id"
+            data={listofInvoices}
+            columns={columns}>
+        </lightning-datatable>
+</lightning-card>
+</template>
