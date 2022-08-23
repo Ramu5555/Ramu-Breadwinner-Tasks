@@ -1,10 +1,43 @@
 public with sharing class InvoiceRelatedListController 
 {
+    public static Integer paidInvoices{get;set;}
+    public static Integer dueInvoices{get;set;}
+    public static List<AggregateResult> totalReceivables{get;set;}
+    public static List<Invoice__c> overdueInvoices{get;set;}
     @AuraEnabled(cacheable=true) 
-    public static List<Invoice__c> getinvoiceRelaredList(String accountId) 
+    public static List<Invoice__c> getinvoiceRelatedList(String accountId) 
     {
         List<Invoice__c> listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId ORDER BY CreatedDate DESC];
         system.debug(listofInvoices);
         return listofInvoices;
+    }
+    @AuraEnabled(cacheable=true)
+    public static Integer totalPaidInvoices(String accountId)
+    {
+        paidInvoices = [SELECT Count() FROM Invoice__c WHERE Status__c='Paid' AND Account__c =:accountId];
+        system.debug(paidInvoices);
+        return paidInvoices;
+    }
+    @AuraEnabled(cacheable=true)
+    public static Integer totalDueInvoices(String accountId)
+    {
+        dueInvoices = [SELECT Count() FROM Invoice__c WHERE Status__c='Due' AND Account__c =:accountId];
+      
+        return dueInvoices;
+    }
+    @AuraEnabled(cacheable=true)
+    public static Decimal totalReceivablesAmount(String accountId)
+    {
+        totalReceivables = [SELECT SUM(Amount_Due__c) SUM FROM Invoice__c WHERE Account__c =:accountId];
+        Decimal sumAmount;
+        sumAmount=Integer.valueOf(totalReceivables[0].get('SUM'));
+        return sumAmount;
+    }
+    @AuraEnabled(cacheable=true)
+    public static List<Invoice__c> totalOverdueInvoices(String accountId)
+    {
+        overdueInvoices = [SELECT Id, Name, Days_Overdue__c, Status__c FROM Invoice__c WHERE Status__c='Overdue' AND Account__c =:accountId];
+     
+        return overdueInvoices;
     }
 }
