@@ -1,10 +1,20 @@
 <template>
 <lightning-card>
     <h4 class="slds-section-title--divider">Summary Information</h4><br>
-            Paid:<br>
-            Current Due: <br>
-            Overdue: <br>
-            Total Receivables: <br><br>
+    <ul class="slds-list_dotted">
+        <div class="slds-p-left_medium slds-p-bottom_xx-small"><li>Paid: {paidInvoices.data}</li></div>
+        <div class="slds-p-left_medium slds-p-bottom_xx-small"><li>Current Due: {dueInvoices.data}</li></div>
+        <div class="slds-p-left_medium slds-p-bottom_xx-small"><li>Overdue: 
+                                                                            <ul class="slds-list_dotted slds-p-left_large slds-p-bottom_xx-small">
+                                                                                <li>1 - 30  : {overdue1_30}</li>
+                                                                                <li>31 - 60 : {overdue31_60}</li>
+                                                                                <li>61 - 90 : {overdue61_90}</li>
+                                                                                <li>90 +    : {overdue90}</li>
+                                                                                <li>Total Overdue: {totalOverdue}</li>
+                                                                            </ul> 
+                                                                </li></div>
+        <div class="slds-p-left_medium slds-p-bottom_xx-small"><li>Total Receivables: {totalReceivables.data}</li></div>
+    </ul><br>
     <h4 class="slds-section-title--divider">Invoices</h4><br>
         <lightning-datatable
             key-field="id"
