@@ -10,7 +10,7 @@ const COLUMNS = [
     { label: 'Due Date', fieldName: 'Due_Date__c', type: 'Date'},
     { label: 'Amount Due', fieldName: 'Amount_Due__c', type: 'currency' },
     { label: 'Amount Paid', fieldName: 'Amount_Paid__c', type: 'currency'},
-    { label: 'Status', fieldName: 'Status__c', type: 'text'},
+    { label: 'Status', fieldName: '', cellAttributes: { iconName: { fieldName: 'Status__c' }, class: { fieldName: 'icon' }}},
     { label: 'Total', fieldName: 'Total__c', type: 'currency'},
     { label: 'Days Overdue', fieldName: 'Days_Overdue__c', type: 'number'}
 ];
@@ -29,17 +29,30 @@ export default class InvoiceRelatedList extends LightningElement
     invoices({ error, data }) 
     {
         if (data) {
-            console.log('Number of invoices'+data.length);
-            let tempInvoiceList = []; 
+          
+            let invoiceList = []; 
             data.forEach((record) => {
-                let tempInvoiceRec = Object.assign({}, record);  
-                tempInvoiceRec.invName = '/' + tempInvoiceRec.Id;
-                tempInvoiceList.push(tempInvoiceRec);
+                let invoiceRec = Object.assign({}, record);  
+                invoiceRec.invName = '/' + invoiceRec.Id;
+                invoiceList.push(invoiceRec);
             });
-            this.listofInvoices = tempInvoiceList;
+            this.listofInvoices = invoiceList;
             this.error = undefined;
-
             console.table(this.listofInvoices);
+            invoiceList.forEach(inv => {
+                if(inv.Status__c.includes("Paid")){
+                    inv.Status__c='action:goal';
+                    inv.icon='slds-icon slds-icon-text-success';
+                }else if(inv.Status__c.includes("Overdue"))
+                {
+                    inv.Status__c='action:goal';
+                    inv.icon='slds-icon slds-icon-text-error';
+                }
+                else{
+                    inv.Status__c='action:goal';
+                    inv.icon='slds-icon slds-icon-text-warning';
+                }
+            });
 
         } else if (error) {
             this.error = result.error;
@@ -74,6 +87,9 @@ export default class InvoiceRelatedList extends LightningElement
          {
             this.overdue90 = this.overdue90 + 1;
          }
+         else if (error) {
+            this.error = result.error;
+        }
        }
         }
     }
