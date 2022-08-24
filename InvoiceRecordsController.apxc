@@ -8,7 +8,7 @@ public class InvoiceRecordsController
     public static Boolean table {get;set;}
     public Boolean displayPopup {get; set;}
     public String sortDirection='ASC';
-    public String sortExp = 'name';
+    public String sortExp = '';
     public String sortField
     {
         get
@@ -82,9 +82,7 @@ public class InvoiceRecordsController
     }
     public void deleteInvoice() 
     {
-        deleteInvoice = New Invoice__c();
-        deleteInvoice = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Id =: selectedId];
-        system.debug('==selectedInvoice=='+deleteInvoice.Name);
+        deleteInvoice = New Invoice__c(Id=selectedId);
         delete deleteInvoice;
         listofInoiceQuery();
     }
