@@ -1,0 +1,30 @@
+@isTest
+public class InvoiceRecordsControllerTest 
+{
+	static testmethod void invoiceControllerTest()
+    {
+        InvoiceRecordsController invRecCon = New InvoiceRecordsController();
+        invRecCon.listofInoiceQuery();
+        invRecCon.sortField = 'Name';
+        invRecCon.tableSorting();
+        invRecCon.showPopup();
+        invRecCon.closePopup();
+        invRecCon.saveInvoice();
+   
+    }
+    static testmethod void invoiceControllerTest2()
+    {
+        InvoiceRecordsController invRecCon = New InvoiceRecordsController();
+        
+        Invoice__c inv = New Invoice__c();
+        inv.Total__c=25000.00;
+        inv.Amount_Paid__c=15000.00;
+        inv.Invoice_Date__c = system.today();
+        insert inv;
+        InvoiceRecordsController.selectedId = inv.id;
+        invRecCon.selectedInvoice();
+         invRecCon.editInvoice();
+        invRecCon.deleteInvoice();
+        invRecCon.getSortDirection();
+    }
+}
