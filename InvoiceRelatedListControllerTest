@@ -1,0 +1,15 @@
+@isTest
+public class InvoiceRelatedListControllerTest 
+{
+	static testmethod void invoiceRelatedListController()
+    {
+        Account acc = New Account();
+        acc.Name = 'Ramu';
+        Insert acc;
+        InvoiceRelatedListController.getinvoiceRelatedList(acc.Id);
+        InvoiceRelatedListController.totalPaidInvoices(acc.Id);
+        InvoiceRelatedListController.totalDueInvoices(acc.Id);
+        InvoiceRelatedListController.totalReceivablesAmount(acc.Id);
+        InvoiceRelatedListController.totalOverdueInvoices(acc.Id);
+    }
+}
