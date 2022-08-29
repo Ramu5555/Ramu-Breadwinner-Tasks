@@ -21,7 +21,7 @@ public class InvoiceRecordsControllerTest
         inv.Amount_Paid__c=15000.00;
         inv.Invoice_Date__c = system.today();
         insert inv;
-        InvoiceRecordsController.selectedId = inv.id;
+        InvoiceRecordsController.selectedId = inv.Id;
         invRecCon.selectedInvoice();
          invRecCon.editInvoice();
         invRecCon.deleteInvoice();
