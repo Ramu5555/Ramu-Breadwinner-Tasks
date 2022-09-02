@@ -3,7 +3,7 @@
     <h4 class="slds-section-title--divider">Summary Information</h4><br>
     <div class="slds-grid slds-gutters slds-p-left_x-large slds-p-right_x-large">
         <div class="slds-col slds-align_absolute-center csize">
-            <span class="slds-text-body_large hSIze"><b>Paid Invoices</b><div class="slds-p-left_x-large tsize"></div></span>
+            <span class="slds-text-body_large hSIze"><b>Paid Invoices</b><div class="slds-p-left_x-large tsize">{paidInvoices.data}</div></span>
           </div>&nbsp;&nbsp;&nbsp;
           <div class="slds-col slds-align_absolute-center csize">
             <span class="slds-text-body_large hSIze"><b>Current Due</b><div class="slds-p-left_x-large tdsize"> {dueInvoices.data}</div></span>
@@ -76,7 +76,10 @@
     <h4 class="slds-section-title--divider">Invoices</h4><br>
         <lightning-datatable
             key-field="id"
-            data={listofInvoices}
+            data={data}
+            sorted-by={sortBy}
+            sorted-direction={sortDirection}
+            onsort={doSorting}
             columns={columns}>
         </lightning-datatable>
         
