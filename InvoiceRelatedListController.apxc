@@ -5,17 +5,31 @@ public with sharing class InvoiceRelatedListController
     public static List<AggregateResult> totalReceivables{get;set;}
     public static List<Invoice__c> overdueInvoices{get;set;}
     @AuraEnabled(cacheable=true) 
-    public static List<Invoice__c> getinvoiceRelatedList(String accountId) 
+    public static List<Invoice__c> getinvoiceRelatedList(String accountId, String field, String sortOrder) 
     {
-        List<Invoice__c> listofInvoices = [SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId ORDER BY CreatedDate DESC];
-        system.debug(listofInvoices);
-        return listofInvoices;
+        String query;
+        if(field == 'invName')
+        {
+            query = 'SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId';
+            if(field != null && sortOrder !=null){
+                query += ' ORDER BY Name '+sortOrder;
+            } 
+        }
+        else
+        {
+            query = 'SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId';
+            if(field != null && sortOrder !=null){
+                query += ' ORDER BY '+field+' '+sortOrder;
+            }
+        }
+        return Database.query(query);
     }
     @AuraEnabled(cacheable=true)
     public static Integer totalPaidInvoices(String accountId)
     {
+        wrapperInvoice wi = New wrapperInvoice();
         paidInvoices = [SELECT Count() FROM Invoice__c WHERE Status__c='Paid' AND Account__c =:accountId];
-        system.debug(paidInvoices);
+     
         return paidInvoices;
     }
     @AuraEnabled(cacheable=true)
@@ -39,5 +53,9 @@ public with sharing class InvoiceRelatedListController
         overdueInvoices = [SELECT Id, Name, Days_Overdue__c, Status__c FROM Invoice__c WHERE Status__c='Overdue' AND Account__c =:accountId];
      
         return overdueInvoices;
+    }
+    public class wrapperInvoice
+    {
+        @AuraEnabled public Integer PaidInvoicesCount{get;set;}
     }
 }
