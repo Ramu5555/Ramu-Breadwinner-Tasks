@@ -1,53 +1,78 @@
 <template>
-<lightning-card>
+
     <h4 class="slds-section-title--divider">Summary Information</h4><br>
+    <div class="slds-grid slds-gutters slds-p-left_x-large slds-p-right_x-large">
+        <div class="slds-col slds-align_absolute-center csize">
+            <span class="slds-text-body_large hSIze"><b>Paid Invoices</b><div class="slds-p-left_x-large tsize"></div></span>
+          </div>&nbsp;&nbsp;&nbsp;
+          <div class="slds-col slds-align_absolute-center csize">
+            <span class="slds-text-body_large hSIze"><b>Current Due</b><div class="slds-p-left_x-large tdsize"> {dueInvoices.data}</div></span>
+          </div>&nbsp;&nbsp;&nbsp;
+          <div class="slds-col slds-align_absolute-center csize">
+            <span class="slds-text-body_large hSIze "><b>Total Receivables</b><div class=" tasize">${totalReceivables.data}</div></span>
+          </div>
+    </div><br>
+    <div class="slds-p-left_large slds-p-right_large">
     <div class="slds-box" style="padding:10px;background-color:white;">
-        <div class="slds-box slds-wrap" style="border-radius:15px;background-color:#8c00ff;color: white;">
-            <div class="slds-grid" style="font-weight:bold;text-align:center;">
-                <div class="slds-col slds-size_1-of-4" style="">
+        <h1 class="slds-page-header__title slds-align_absolute-center slds-truncate">
+            Overdue Invoices
+        </h1>
+            <div class="slds-grid" style="text-align:center;">
+                <div class="slds-col slds-size_1-of-5" style="">
                 <div>
-                    <h1 class="slds-page-header__title slds-align-middle slds-truncate">
-                        Paid Invoices:
+                    <h1 class="slds-align-middle slds-truncate" style="font-weight:bold;">
+                        1 - 30 Days
                     </h1>
                 </div>
-                <div style="font-size:3em;">
-                    {paidInvoices.data}
+                <div style="font-size:2em;">
+                    {overdue1_30}
                 </div>
                 </div>
-                <div class="slds-col slds-size_1-of-4" style="">
+                <div class="slds-col slds-size_1-of-5" style="">
                     <div>
-                        <h1 class="slds-page-header__title slds-align-middle slds-truncate">
-                            Current Due:
+                        <h1 class="slds-align-middle slds-truncate" style="font-weight:bold;">
+                            31 - 60 Days
                         </h1>
                     </div>
-                    <div style="font-size:3em;">
-                        {dueInvoices.data}
+                    <div style="font-size:2em;">
+                        {overdue31_60}
                     </div>
                     </div>
-                    <div class="slds-col slds-size_1-of-4" style="">
+                    <div class="slds-col slds-size_1-of-5" style="">
                         <div>
-                            <h1 class="slds-page-header__title slds-align-middle slds-truncate">
-                                Total Receivables:
+                            <h1 class="slds-align-middle slds-truncate" style="font-weight:bold;">
+                                61 - 90 Days
                             </h1>
                         </div>
-                        <div style="font-size:3em;">
-                            ${totalReceivables.data}
+                        <div style="font-size:2em;">
+                            {overdue61_90}
                         </div>
                         </div>
-                        <div class="slds-col slds-size_1-of-4" style="">
+                        <div class="slds-col slds-size_1-of-5" style="">
                             <div>
-                                <h1 class="slds-page-header__title slds-align-middle slds-truncate">
-                                    Overdue:
+                                <h1 class="slds-align-middle slds-truncate" style="font-weight:bold;">
+                                    90+ Days
                                 </h1>
                             </div>
-                            <div style="font-size:3em;">
-                                
+                            <div style="font-size:2em;">
+                                {overdue90}
                             </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5" style="">
+                            <div>
+                                <h1 class="slds-align-middle slds-truncate" style="font-weight:bold;">
+                                    Total Overdue
+                                </h1>
                             </div>
+                            <div style="font-size:2em;">
+                                {totalOverdue}
+                            </div>
+                        </div>
             </div>
-        </div>
+    </div>
     </div>
     <br>
+    <lightning-card>
     <h4 class="slds-section-title--divider">Invoices</h4><br>
         <lightning-datatable
             key-field="id"
