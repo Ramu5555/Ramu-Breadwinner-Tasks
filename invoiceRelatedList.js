@@ -5,27 +5,30 @@ import totalDueInvoices from '@salesforce/apex/InvoiceRelatedListController.tota
 import totalReceivablesAmount from '@salesforce/apex/InvoiceRelatedListController.totalReceivablesAmount';
 import totalOverdueInvoices from '@salesforce/apex/InvoiceRelatedListController.totalOverdueInvoices';
 const COLUMNS = [
-    { label: 'Invoice Number', fieldName: 'invName', type: 'url', typeAttributes: {label: { fieldName: 'Name' }, target: '_blank' }},
-    { label: 'Invoice Date', fieldName: 'Invoice_Date__c', type: 'Date' },
-    { label: 'Due Date', fieldName: 'Due_Date__c', type: 'Date'},
-    { label: 'Amount Due', fieldName: 'Amount_Due__c', type: 'currency' },
-    { label: 'Amount Paid', fieldName: 'Amount_Paid__c', type: 'currency'},
+    { label: 'Invoice Number', fieldName: 'invName', type: 'url', typeAttributes: {label: { fieldName: 'Name' }, target: '_blank'},sortable: "true" },
+    { label: 'Invoice Date', fieldName: 'Invoice_Date__c', type: 'date' ,sortable: "true",typeAttributes: {day: "numeric", month: "numeric", year: "numeric"}},
+    { label: 'Due Date', fieldName: 'Due_Date__c', type: 'date',sortable: "true",typeAttributes: {day: "numeric", month: "numeric", year: "numeric"}},
+    { label: 'Amount Due', fieldName: 'Amount_Due__c', type: 'currency',sortable: "true" },
+    { label: 'Amount Paid', fieldName: 'Amount_Paid__c', type: 'currency',sortable: "true" },
     { label: 'Status', fieldName: '', cellAttributes: { iconName: { fieldName: 'Status__c' }, class: { fieldName: 'icon' }}},
-    { label: 'Total', fieldName: 'Total__c', type: 'currency'},
-    { label: 'Days Overdue', fieldName: 'Days_Overdue__c', type: 'number'}
+    { label: 'Total', fieldName: 'Total__c', type: 'currency',sortable: "true"},
+    { label: 'Days Overdue', fieldName: 'Days_Overdue__c', type: 'number',sortable: "true"}
 ];
 export default class InvoiceRelatedList extends LightningElement 
 {
-    listofInvoices = [];
+    @track data;
+    @track columns = COLUMNS;
+    @track sortBy='Name';
+    @track sortDirection='asc';
     overduedata = [];
     overdue1_30 = 0;
     overdue31_60 = 0;
     overdue61_90 = 0;
     overdue90 = 0;
     totalOverdue = 0;
+    @track result;
     @api recordId;
-    columns = COLUMNS;
-    @wire(getinvoiceRelatedList,{accountId:'$recordId'})
+    @wire(getinvoiceRelatedList,{accountId:'$recordId',field : '$sortBy',sortOrder : '$sortDirection'})
     invoices({ error, data }) 
     {
         if (data) {
@@ -36,9 +39,9 @@ export default class InvoiceRelatedList extends LightningElement
                 invoiceRec.invName = '/' + invoiceRec.Id;
                 invoiceList.push(invoiceRec);
             });
-            this.listofInvoices = invoiceList;
+            this.data = invoiceList;
             this.error = undefined;
-            console.table(this.listofInvoices);
+            console.table(this.data);
             invoiceList.forEach(inv => {
                 if(inv.Status__c.includes("Paid")){
                     inv.Status__c='action:goal';
@@ -57,6 +60,12 @@ export default class InvoiceRelatedList extends LightningElement
         } else if (error) {
             this.error = result.error;
         }
+    }
+    doSorting(event) 
+    {
+        
+        this.sortBy = event.detail.fieldName;
+        this.sortDirection = event.detail.sortDirection;
     }
     @wire(totalPaidInvoices,{accountId:'$recordId'})paidInvoices;
     @wire(totalDueInvoices,{accountId:'$recordId'})dueInvoices;
