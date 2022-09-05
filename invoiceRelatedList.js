@@ -1,8 +1,6 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import getinvoiceRelatedList from '@salesforce/apex/InvoiceRelatedListController.getinvoiceRelatedList';
-import totalPaidInvoices from '@salesforce/apex/InvoiceRelatedListController.totalPaidInvoices';
-import totalDueInvoices from '@salesforce/apex/InvoiceRelatedListController.totalDueInvoices';
-import totalReceivablesAmount from '@salesforce/apex/InvoiceRelatedListController.totalReceivablesAmount';
+import invoiceSummaryInformation from '@salesforce/apex/InvoiceRelatedListController.invoiceSummaryInformation';
 import totalOverdueInvoices from '@salesforce/apex/InvoiceRelatedListController.totalOverdueInvoices';
 const COLUMNS = [
     { label: 'Invoice Number', fieldName: 'invName', type: 'url', typeAttributes: {label: { fieldName: 'Name' }, target: '_blank'},sortable: "true" },
@@ -26,6 +24,7 @@ export default class InvoiceRelatedList extends LightningElement
     overdue61_90 = 0;
     overdue90 = 0;
     totalOverdue = 0;
+    summaryInformation = [];
     @track result;
     @api recordId;
     @wire(getinvoiceRelatedList,{accountId:'$recordId',field : '$sortBy',sortOrder : '$sortDirection'})
@@ -67,9 +66,14 @@ export default class InvoiceRelatedList extends LightningElement
         this.sortBy = event.detail.fieldName;
         this.sortDirection = event.detail.sortDirection;
     }
-    @wire(totalPaidInvoices,{accountId:'$recordId'})paidInvoices;
-    @wire(totalDueInvoices,{accountId:'$recordId'})dueInvoices;
-    @wire(totalReceivablesAmount,{accountId:'$recordId'})totalReceivables;
+    @wire(invoiceSummaryInformation,{accountId:'$recordId'})
+    paidInv({ error, data })
+    {
+        if(data)
+        {
+            this.summaryInformation = data;
+        }
+    }
     @wire(totalOverdueInvoices,{accountId:'$recordId'})
     overdue({ error, data })
     {
