@@ -48,7 +48,6 @@ public class InvoiceRecordsController
         system.debug('sortDirection '+sortDirection);
         String sortf = sortField  + ' ' + sortDirection;
         listofInvoices = Database.query('SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c order by '+ sortf + ''); 
-        
     }
     public void selectedInvoice()
     {
