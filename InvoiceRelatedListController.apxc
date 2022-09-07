@@ -8,16 +8,15 @@ public with sharing class InvoiceRelatedListController
     public static List<Invoice__c> getinvoiceRelatedList(String accountId, String field, String sortOrder) 
     {
         String query;
+        query = 'SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId';
         if(field == 'invName')
         {
-            query = 'SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId';
             if(field != null && sortOrder !=null){
                 query += ' ORDER BY Name '+sortOrder;
             } 
         }
         else
         {
-            query = 'SELECT Id, Name, Account__r.Name, Amount_Paid__c, Amount_Due__c, Due_Date__c, Invoice_Date__c, Status__c, Total__c, Days_Overdue__c FROM Invoice__c WHERE Account__c =:accountId';
             if(field != null && sortOrder !=null){
                 query += ' ORDER BY '+field+' '+sortOrder;
             }
@@ -25,37 +24,31 @@ public with sharing class InvoiceRelatedListController
         return Database.query(query);
     }
     @AuraEnabled(cacheable=true)
-    public static Integer totalPaidInvoices(String accountId)
+    public static InvoiceWrapper invoiceSummaryInformation(String accountId)
     {
-        wrapperInvoice wi = New wrapperInvoice();
+        InvoiceWrapper invWrap = New InvoiceWrapper();
         paidInvoices = [SELECT Count() FROM Invoice__c WHERE Status__c='Paid' AND Account__c =:accountId];
-     
-        return paidInvoices;
-    }
-    @AuraEnabled(cacheable=true)
-    public static Integer totalDueInvoices(String accountId)
-    {
         dueInvoices = [SELECT Count() FROM Invoice__c WHERE Status__c='Due' AND Account__c =:accountId];
-      
-        return dueInvoices;
-    }
-    @AuraEnabled(cacheable=true)
-    public static Decimal totalReceivablesAmount(String accountId)
-    {
         totalReceivables = [SELECT SUM(Amount_Due__c) SUM FROM Invoice__c WHERE Account__c =:accountId];
         Decimal sumAmount;
         sumAmount=Integer.valueOf(totalReceivables[0].get('SUM'));
-        return sumAmount;
+        invWrap.PaidInvoicesCount = paidInvoices;
+        invWrap.dueInvoicesCount = dueInvoices;
+        invWrap.totalReceivablesAmount = sumAmount;
+        return invWrap;
     }
     @AuraEnabled(cacheable=true)
     public static List<Invoice__c> totalOverdueInvoices(String accountId)
     {
         overdueInvoices = [SELECT Id, Name, Days_Overdue__c, Status__c FROM Invoice__c WHERE Status__c='Overdue' AND Account__c =:accountId];
-     
+        
         return overdueInvoices;
     }
-    public class wrapperInvoice
+    public class InvoiceWrapper
     {
         @AuraEnabled public Integer PaidInvoicesCount{get;set;}
+        @AuraEnabled public Integer dueInvoicesCount{get;set;}
+        @AuraEnabled public Decimal totalReceivablesAmount{get;set;} 
+        
     }
 }
