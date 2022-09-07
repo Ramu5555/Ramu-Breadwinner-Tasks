@@ -1,7 +1,7 @@
 @isTest
 public class InvoiceRecordsControllerTest 
 {
-	static testmethod void invoiceControllerTest()
+	static testmethod void invoiceControllerTest1()
     {
         InvoiceRecordsController invRecCon = New InvoiceRecordsController();
         invRecCon.listofInoiceQuery();
