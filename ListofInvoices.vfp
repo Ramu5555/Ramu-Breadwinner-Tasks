@@ -312,7 +312,7 @@
                                         <apex:param assignTo="{!selectedId}" value="{!inv.Id}" name="selectedId"/>
                                     </apex:commandLink>
                                     &nbsp;|&nbsp;
-                                    <apex:commandLink value="Delete" action="{!deleteInvoice}" reRender="refresh">
+                                    <apex:commandLink value="Delete" action="{!deleteInvoice}" reRender="refresh" oncomplete="showToastDelete()">
                                         <apex:param assignTo="{!selectedId}" value="{!inv.Id}" name="selectedId"/>
                                     </apex:commandLink>
                                 </td>
@@ -327,7 +327,6 @@
         </apex:pageBlock>
         <apex:pageBlock title="Invoice" rendered="{!table}">
             <apex:pageBlockSection title="Invoice Details" columns="2" collapsible="false">
-                
                 <apex:outputField value="{!invoice.Name}"></apex:outputField>
                 <apex:outputField value="{!invoice.Account__r.Name}"></apex:outputField>
                 <apex:outputField value="{!invoice.Amount_Paid__c}"></apex:outputField>
@@ -337,7 +336,6 @@
                 <apex:outputField value="{!invoice.Status__c}"></apex:outputField>
                 <apex:outputField value="{!invoice.Total__c}"></apex:outputField>
                 <apex:outputField value="{!invoice.Days_Overdue__c}"></apex:outputField>
-                
             </apex:pageBlockSection>
             <br/>
             <center><apex:commandButton value="Close"/></center>
@@ -354,9 +352,11 @@
                         <apex:inputField value="{!newInvoice.Invoice_Date__c}" showDatePicker="false" type="date"/>
                         <apex:inputField value="{!newInvoice.Due_Date__c}" showDatePicker="false" type="date"/>
                     </apex:pageBlockSection>
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton value="Save" rerender="popup,refresh" action="{!saveInvoice}" oncomplete="showToastSave()"/>	
+                        <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popup"/>
+                    </apex:pageBlockButtons>
                 </apex:pageBlock>
-                <center><apex:commandButton value="Save" rerender="popup,refresh" action="{!saveInvoice}" />	
-                    <apex:commandButton value="cancel" action="{!closePopup}" rerender="popup"/></center>
             </apex:outputPanel>
         </apex:outputPanel>
     </apex:form>
@@ -387,11 +387,28 @@
         color:black;
         }
     </style>
-    <script>
+    <script type='text/javascript'>
     function invoiceTableSort(sortField)
     {
         console.log(sortField);
         sortInvoiceTable(sortField);
+    }
+    
+    function showToastDelete() {
+        sforce.one.showToast({
+            "title": "Invoive",
+            "message": "Invoice Deleted.",
+            "type": "success"
+        }); 
+        window.onload = showToast();
+    }
+    function showToastSave() {
+        sforce.one.showToast({
+            "title": "Invoive",
+            "message": "Invoice saved.",
+            "type": "success"
+        }); 
+        window.onload = showToast();
     }
     </script>
 </apex:page>
