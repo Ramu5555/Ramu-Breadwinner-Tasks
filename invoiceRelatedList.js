@@ -27,11 +27,12 @@ export default class InvoiceRelatedList extends LightningElement
     summaryInformation = [];
     @track result;
     @api recordId;
+    @api isLoading = false;
     @wire(getinvoiceRelatedList,{accountId:'$recordId',field : '$sortBy',sortOrder : '$sortDirection'})
     invoices({ error, data }) 
     {
         if (data) {
-          
+            this.isLoading = false;
             let invoiceList = []; 
             data.forEach((record) => {
                 let invoiceRec = Object.assign({}, record);  
@@ -62,7 +63,7 @@ export default class InvoiceRelatedList extends LightningElement
     }
     doSorting(event) 
     {
-        
+        this.isLoading = true;
         this.sortBy = event.detail.fieldName;
         this.sortDirection = event.detail.sortDirection;
     }
