@@ -3,9 +3,20 @@
     <apex:form >
         <apex:pageBlock title="Invoices" rendered="{!!table}">
             <apex:outputPanel layout="block"  id="refresh">
-                <apex:actionFunction action="{!tableSorting}" name="sortInvoiceTable" reRender="refresh">
+                <apex:actionFunction action="{!tableSorting}" name="sortInvoiceTable" reRender="refresh" status="sts">
                     <apex:param name="sortField" value="" assignTo="{!sortField}"/>
                 </apex:actionFunction>
+                <apex:actionstatus id="sts">
+                    <apex:facet name="start">
+                        <div class="slds-spinner_container" style="position:fixed">
+                            <div id="mySpinner" role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading..</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </apex:facet>
+                </apex:actionstatus>
                 <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example advanced table of Opportunities in actionable mode">
                     <thead>
                         <tr class="slds-line-height_reset">
@@ -308,7 +319,7 @@
                                     </div>
                                 </td>
                                 <td class="slds-cell_action-mode" role="gridcell">
-                                    <apex:commandLink value="Edit" action="{!editInvoice}" rerender="popup">
+                                    <apex:commandLink value="Edit" action="{!editInvoice}" rerender="popup" status="sts">
                                         <apex:param assignTo="{!selectedId}" value="{!inv.Id}" name="selectedId"/>
                                     </apex:commandLink>
                                     &nbsp;|&nbsp;
@@ -322,7 +333,7 @@
                 </table>
             </apex:outputPanel>
             <br/>
-            <center><apex:commandButton value="New" action="{!showPopup}" rerender="popup"/></center>
+            <center><apex:commandButton value="New" action="{!showPopup}" rerender="popup" status="sts"/></center>
             
         </apex:pageBlock>
         <apex:pageBlock title="Invoice" rendered="{!table}">
